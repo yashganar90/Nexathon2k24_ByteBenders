@@ -1,9 +1,11 @@
-import requests
 import random
 from PIL import Image
 from io import BytesIO
 import tkinter as tk
 from tkinter import filedialog
+from flask import Flask, request
+
+app = Flask(__name__)
 
 # Hugging Face API key
 api_key = "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"
@@ -15,7 +17,17 @@ max_images = 4
 def get_random_number(min_val, max_val):
     return random.randint(min_val, max_val)
 
+                
+@app.route('/your_endpoint', methods=['POST'])
+def receive_prompt():
+  prompt = request.form['prompt']
+  # Process the received prompt (e.g., store it in a database)
+  print(f'Received prompt: {prompt}')
+  return 'Prompt received successfully!', 200
 
+if __name__ == '__main__':
+  app.run(debug=True)
+  
 # Function to generate images
 def generate_images(input_text):
     loading_label.config(text="Loading...")
@@ -26,7 +38,7 @@ def generate_images(input_text):
     for i in range(max_images):
         # Generate a random number between 1 and 10000 and append it to the prompt
         random_number = get_random_number(1, 10000)
-        prompt = f"{input_text} {random_number}"
+        prompt = f"{prompt} {random_number}"
 
         # API request to Hugging Face
         response = requests.post(
@@ -69,6 +81,7 @@ def generate_button_click():
             for i, img in enumerate(images):
                 img.show()
                 save_image(img, i)
+
 
 
 # GUI setup
