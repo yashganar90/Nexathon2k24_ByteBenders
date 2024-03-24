@@ -32,11 +32,12 @@ class Landingpage extends StatelessWidget {
                     );
                   },
                   label: Text("Get Started"),
-                  icon: Icon(Icons.arrow_back),
+                  icon: Icon(Icons.arrow_forward),
                   style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Color(0xFFF72585),
-                      minimumSize: Size(280, 50)),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Color(0xFFF72585),
+                    minimumSize: Size(280, 50),
+                  ),
                 ),
               ),
             ),
