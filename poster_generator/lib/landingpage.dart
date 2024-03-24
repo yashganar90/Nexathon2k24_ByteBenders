@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:poster_generator/Widgets/button_widget.dart';
 import 'package:poster_generator/homepage.dart';
 
 import 'Widgets/custom_page_route.dart';
@@ -25,18 +26,12 @@ class Landingpage extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 50),
               child: Directionality(
                 textDirection: TextDirection.rtl,
-                child: ElevatedButton.icon(
-                  onPressed: (){
-                    Navigator.pop(
-                      context,
-                      CustomPageRoute(child: const Homepage()),
-                    );
-                  },
-                  label: Text("Get Started"),
-                  icon: Icon(Icons.arrow_back),
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, backgroundColor: Color(0xFFF72585), minimumSize: Size(280,50)
+                child: ButtonWidget(
+                  onPressed: () => Navigator.pop(
+                    context,
+                    CustomPageRoute(child: const Homepage()),
                   ),
+                  text: 'Get Started',
                 ),
               ),
             ),

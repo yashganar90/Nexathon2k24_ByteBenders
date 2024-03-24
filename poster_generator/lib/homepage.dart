@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:poster_generator/databases/database.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController event = new TextEditingController();
-    TextEditingController venue = new TextEditingController();
-    TextEditingController date = new TextEditingController();
+    String _promt = "";
+    TextEditingController promt = new TextEditingController();
+    String image = "";
+    var isLoaded = false;
 
     return Scaffold(
       backgroundColor: Color(0xFFF1F8FF),
@@ -39,7 +41,11 @@ class Homepage extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-
+            SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: isLoaded
+                    ? Image.network(image)
+                    : Image.asset('assets/animations/loader.gif')),
             Padding(
               padding: EdgeInsets.only(left: 16, top: 10),
               child: Text(
@@ -56,7 +62,7 @@ class Homepage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(20),
               child: TextField(
-                controller: event,
+                controller: promt,
                 decoration: InputDecoration(
                     enabledBorder: const OutlineInputBorder(
                         borderSide:
@@ -67,7 +73,7 @@ class Homepage extends StatelessWidget {
                     hintText: 'Describe about event',
                     suffixIcon: IconButton(
                         onPressed: () {
-                          event.clear();
+                          promt.clear();
                         },
                         icon: Icon(
                           Icons.clear,
@@ -81,8 +87,12 @@ class Homepage extends StatelessWidget {
                 textDirection: TextDirection.rtl,
                 child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white, backgroundColor: Color(0xFF7209B7), minimumSize: Size(280, 50)),
-                    onPressed: () {},
+                        minimumSize: Size(280, 50),
+                        primary: Color(0xFF7209B7),
+                        onPrimary: Colors.white),
+                    onPressed: () async {
+                      await fetchImageUrls(promt.text);
+                    },
                     icon: Icon(Icons.arrow_back_rounded),
                     label: Text(
                       'Next',

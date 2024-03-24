@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class ButtonWidget extends StatelessWidget {
   final String text;
-  final VoidCallback onClicked;
+  final VoidCallback onPressed;
 
   const ButtonWidget({
     Key? key,
     required this.text,
-    required this.onClicked,
+    required this.onPressed,
   }) : super(key: key);
 
   @override
@@ -17,13 +17,14 @@ class ButtonWidget extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        padding: EdgeInsets.symmetric(horizontal: 52, vertical: 16), // Set vertical padding to 16
+        padding: EdgeInsets.symmetric(
+            horizontal: 52, vertical: 16), // Set vertical padding to 16
       ),
       child: Text(
         text,
         style: TextStyle(fontSize: 20),
       ),
-      onPressed: onClicked,
+      onPressed: onPressed,
     );
   }
 }

@@ -1,24 +1,22 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
-void sendPromptToServer(String prompt) async {
-  // Replace with your Flask server's URL
-  final url = Uri.parse('http://127.0.0.1:5000/promt');
+List<String> imageUrls = [];
+Future<void> fetchImageUrls(String promt) async {
+  final response = await http.post(
+    Uri.parse(
+        'http://10.0.2.2:5000/promt'), // Replace with your Flask server URL
+    body: {'prompt': promt}, // Replace with your prompt
+  );
 
-  try {
-    final response = await http.post(
-      url,
-      body: {'prompt': prompt},
-    );
-
-    if (response.statusCode == 200) {
-      // Handle successful response (e.g., show a success message)
-      print('Prompt sent successfully!');
-    } else {
-      // Handle error response (e.g., show an error message)
-      print('Error sending prompt: ${response.statusCode}');
-    }
-  } catch (error) {
-    // Handle exceptions (e.g., network errors)
-    print('Error sending prompt: $error');
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body);
+    print(data);
+    // imageUrls = List<String>.from(data['images']);
+  } else if (response.statusCode == 404) {
+    print('Error 404 occured');
+  } else {
+    throw Exception('Failed to load image URLs');
   }
 }
