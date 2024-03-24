@@ -25,11 +25,7 @@ class Landingpage extends StatelessWidget {
               child: Directionality(
                 textDirection: TextDirection.rtl,
                 child: ElevatedButton.icon(
-<<<<<<< Updated upstream
                   onPressed: () {
-=======
-                  onPressed: (){
->>>>>>> Stashed changes
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const Homepage()),
@@ -38,16 +34,9 @@ class Landingpage extends StatelessWidget {
                   label: Text("Get Started"),
                   icon: Icon(Icons.arrow_back),
                   style: ElevatedButton.styleFrom(
-<<<<<<< Updated upstream
                       foregroundColor: Colors.white,
                       backgroundColor: Color(0xFFF72585),
                       minimumSize: Size(280, 50)),
-=======
-                    foregroundColor: Colors.white,
-                    backgroundColor: Color(0xFFF72585),
-                    minimumSize: Size(280, 50),
-                  ),
->>>>>>> Stashed changes
                 ),
               ),
             ),
