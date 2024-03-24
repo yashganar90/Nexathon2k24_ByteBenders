@@ -5,8 +5,7 @@ import 'package:http/http.dart' as http;
 List<String> imageUrls = [];
 Future<void> fetchImageUrls(String promt) async {
   final response = await http.post(
-    Uri.parse(
-        'http://10.0.2.2:5000/promt'), // Replace with your Flask server URL
+    Uri.parse('http://10.0.2.2:8080/promt'), // Replace with your Flask server URL
     body: {'prompt': promt}, // Replace with your prompt
   );
 

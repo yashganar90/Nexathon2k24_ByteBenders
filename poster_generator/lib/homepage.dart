@@ -45,7 +45,7 @@ class Homepage extends StatelessWidget {
               SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: isLoaded
-                      ? Image.network(image)
+                      ? Image.asset(image)
                       : Image.asset('assets/animations/siri.gif')),
               Padding(
                 padding: EdgeInsets.only(left: 16, top: 10),
@@ -103,6 +103,7 @@ class Homepage extends StatelessWidget {
                           onPrimary: Colors.white),
                       onPressed: () async {
                         await fetchImageUrls(promt.text);
+                        isLoaded = true;
                       },
                       icon: Icon(Icons.arrow_back_rounded),
                       label: Text(
