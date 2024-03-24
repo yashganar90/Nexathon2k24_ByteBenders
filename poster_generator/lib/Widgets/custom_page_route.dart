@@ -7,24 +7,31 @@ class CustomPageRoute extends PageRouteBuilder {
   CustomPageRoute({
     required this.child,
   }) : super(
-    transitionDuration: Duration(seconds: 1),
+    transitionDuration: Duration(milliseconds: 500),
     pageBuilder: (
         context,
         animation,
         secondaryAnimation,
-        ) => child,
-  );
+        ) =>
+    child,
+    transitionsBuilder: (
+        context,
+        animation,
+        secondaryAnimation,
+        child,
+        ) {
+      const begin = Offset(1.0, 0.0);
+      const end = Offset.zero;
+      const curve = Curves.easeInOut;
 
-  @override
-  Widget buildTransitions(
-      BuildContext context,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child,
-      ) {
-    return ScaleTransition(
-      scale: animation,
-      child: child,
-    );
-  }
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      var offsetAnimation = animation.drive(tween);
+
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    },
+  );
 }
