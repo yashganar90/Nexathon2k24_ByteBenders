@@ -36,7 +36,7 @@ def generate_images(input_text):
 
         # API request to Hugging Face
         response = requests.post(
-            "https://api-inference.huggingface.co/models/prompthero/openjourney",
+            "http://api-inference.huggingface.co/models/prompthero/openjourney",
             headers={
                 "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json"
@@ -52,8 +52,9 @@ def generate_images(input_text):
         image_data = response.content
         image = Image.open(BytesIO(image_data))
         image_urls.append(image)
-
     return image_urls
+
+
 @app.route('/promt', methods=['POST'])
 def receive_prompt():
     prompt = request.form['prompt']

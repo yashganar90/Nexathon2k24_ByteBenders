@@ -13,7 +13,7 @@ class Homepage extends StatelessWidget {
     var isLoaded = false;
 
     return Scaffold(
-      backgroundColor: Color(0xFFF1F8FF),
+      backgroundColor: Colors.black87,
       drawer: const Drawer(
         backgroundColor: Color(0xFFF1F8FF),
       ),
@@ -34,73 +34,85 @@ class Homepage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: const Color(0xFFF1F8FF),
       ),
-      body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            SizedBox(
-              height: 10,
-            ),
-            SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: isLoaded
-                    ? Image.network(image)
-                    : Image.asset('assets/animations/loader.gif')),
-            Padding(
-              padding: EdgeInsets.only(left: 16, top: 10),
-              child: Text(
-                'Input Prompt',
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'Jakarta'),
+      body: SingleChildScrollView(
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: 10,
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: TextField(
-                controller: promt,
-                decoration: InputDecoration(
-                    enabledBorder: const OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Color(0xFF7209B7), width: 2)),
-                    focusedBorder: const OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Color(0xFF7209B7), width: 2)),
-                    hintText: 'Describe about event',
-                    suffixIcon: IconButton(
-                        onPressed: () {
-                          promt.clear();
-                        },
-                        icon: Icon(
-                          Icons.clear,
-                          color: Color(0xFF7209B7),
-                        ))),
+              SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: isLoaded
+                      ? Image.network(image)
+                      : Image.asset('assets/animations/siri.gif')),
+              Padding(
+                padding: EdgeInsets.only(left: 16, top: 10),
+                child: Text(
+                  'Input Prompt',
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Jakarta',
+                      color: Color(0xFFF1F8FF)),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 100, bottom: 20),
-              child: Directionality(
-                textDirection: TextDirection.rtl,
-                child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: Size(280, 50),
-                        primary: Color(0xFF7209B7),
-                        onPrimary: Colors.white),
-                    onPressed: () async {
-                      await fetchImageUrls(promt.text);
-                    },
-                    icon: Icon(Icons.arrow_back_rounded),
-                    label: Text(
-                      'Next',
-                      style: TextStyle(fontSize: 20),
-                    )),
+              SizedBox(
+                height: 10,
               ),
-            )
-          ]),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.white,
+                  ),
+                  child: TextField(
+                    controller: promt,
+                    decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Color(0xFF7209B7), width: 2)),
+                        focusedBorder: const OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Color(0xFF7209B7), width: 2)),
+                        label: Text(
+                          'Describe about event',
+                          style: TextStyle(color: Color(0xFF7209B7)),
+                        ),
+                        suffixIcon: IconButton(
+                            onPressed: () {
+                              promt.clear();
+                            },
+                            icon: Icon(
+                              Icons.clear,
+                              color: Color(0xFFF1F8FF),
+                            ))),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 100, bottom: 20),
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: Size(280, 50),
+                          primary: Color(0xFF7209B7),
+                          onPrimary: Colors.white),
+                      onPressed: () async {
+                        await fetchImageUrls(promt.text);
+                      },
+                      icon: Icon(Icons.arrow_back_rounded),
+                      label: Text(
+                        'Next',
+                        style: TextStyle(fontSize: 20),
+                      )),
+                ),
+              )
+            ]),
+      ),
     );
   }
 }

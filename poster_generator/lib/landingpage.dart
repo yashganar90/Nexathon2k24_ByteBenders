@@ -27,7 +27,7 @@ class Landingpage extends StatelessWidget {
                 textDirection: TextDirection.rtl,
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    Navigator.pop(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const Homepage()),
                     );
