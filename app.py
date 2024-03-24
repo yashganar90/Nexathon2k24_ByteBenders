@@ -6,8 +6,6 @@ from io import BytesIO
 
 # Hugging Face API key
 api_key = "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"
-# Number of images to generate for each prompt
-max_images = 4
 
 # Function to generate a random number between min and max (inclusive)
 def get_random_number(min_val, max_val):
@@ -50,10 +48,10 @@ def enhance_prompt(prompt):
     return prompt
                 
 # Function to generate images
-def generate_images(input_text):
+def generate_images(input_text, num_images, resolution):
     image_urls = []
 
-    for i in range(max_images):
+    for i in range(num_images):
         # Generate a random number between 1 and 10000 and append it to the prompt
         random_number = get_random_number(1, 10000)
         enhanced_prompt = enhance_prompt(input_text)
@@ -75,23 +73,36 @@ def generate_images(input_text):
 
         image_data = response.content
         image = Image.open(BytesIO(image_data))
+        if resolution == '512x512':
+            image = image.resize((512, 512))
+        elif resolution == '1024x1024':
+            image = image.resize((1024, 1024))
         image_urls.append(image)
 
     return image_urls
 
 # Streamlit code
-st.title("AI Image Generation App")
+
+st.set_page_config(
+    page_icon= "🤖",
+    page_title= "ByteBenders Poster Creator"
+)
+
+st.title("ByteBenders Poster Creation App")
 with st.expander("About the App"):
-        st.write("This is a simple image generation app that uses AI to generate images from text prompts.")
+        st.write("This is a simple image generation app that uses Huggingface API to generate images from text prompts.")
         
-st.subheader("Image generation using Huggingface Diffusers")
-input_prompt = st.text_input("Enter your text prompt")
-    
+st.subheader("Let your creativity enhance with AI")
+input_prompt = st.text_input("What kind of poster you want to create?")
+
+num_images = st.slider("Select number of images", 0, 10, 4)
+resolution = st.selectbox("Select resolution", ['512x512', '1024x1024'])
+
 if input_prompt is not None:
-        if st.button("Generate Image"):
-            enhanced_prompt= enhance_prompt(input_prompt)
-            image_outputs = generate_images(enhanced_prompt)
-            st.info("Generating images.....")
-            st.success("Images Generated Successfully")
-            for idx, image_output in enumerate(image_outputs):
-                st.image(image_output, caption=f"Generated Image {idx+1} by Huggingface Diffusers")
+    if st.button("Generate Image"):
+        enhanced_prompt = enhance_prompt(input_prompt)
+        image_outputs = generate_images(enhanced_prompt, num_images, resolution)
+        st.info("Generating images.....")
+        st.success("Images Generated Successfully")
+        for idx, image_output in enumerate(image_outputs):
+            st.image(image_output, caption=f"Generated Image {idx+1} by Huggingface API")
