@@ -39,6 +39,7 @@ class Homepage extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
+
             Padding(
               padding: EdgeInsets.only(left: 16, top: 10),
               child: Text(
@@ -80,9 +81,7 @@ class Homepage extends StatelessWidget {
                 textDirection: TextDirection.rtl,
                 child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                        minimumSize: Size(280, 50),
-                        primary: Color(0xFF7209B7),
-                        onPrimary: Colors.white),
+                        foregroundColor: Colors.white, backgroundColor: Color(0xFF7209B7), minimumSize: Size(280, 50)),
                     onPressed: () {},
                     icon: Icon(Icons.arrow_back_rounded),
                     label: Text(

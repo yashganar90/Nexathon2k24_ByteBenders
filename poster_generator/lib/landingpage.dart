@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:poster_generator/homepage.dart';
 
+import 'Widgets/custom_page_route.dart';
+
 class Landingpage extends StatelessWidget {
   const Landingpage({super.key});
 
@@ -25,17 +27,15 @@ class Landingpage extends StatelessWidget {
                 textDirection: TextDirection.rtl,
                 child: ElevatedButton.icon(
                   onPressed: (){
-                    Navigator.push(
+                    Navigator.pop(
                       context,
-                      MaterialPageRoute(builder: (context) => const Homepage()),
+                      CustomPageRoute(child: const Homepage()),
                     );
                   },
                   label: Text("Get Started"),
                   icon: Icon(Icons.arrow_back),
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(280,50),
-                    primary: Color(0xFFF72585),
-                    onPrimary: Colors.white
+                    foregroundColor: Colors.white, backgroundColor: Color(0xFFF72585), minimumSize: Size(280,50)
                   ),
                 ),
               ),
