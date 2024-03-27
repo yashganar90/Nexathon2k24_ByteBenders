@@ -4,6 +4,7 @@ import requests
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import csv
+import speech_recognition as sr
 
 # Function to read enhancements from a CSV file
 def read_enhancements_from_csv(file_path):
@@ -12,26 +13,44 @@ def read_enhancements_from_csv(file_path):
         reader = csv.reader(csvfile)
         for row in reader:
             key, enhancement = row
-            enhancements[key] = enhancement
+            enhancements[key.lower()] = enhancement
     return enhancements
 
 # Function to enhance the input prompt with enhancements from a CSV file
 def enhance_prompt_with_csv(prompt, csv_file_path):
     enhancements = read_enhancements_from_csv(csv_file_path)
     for key, enhancement in enhancements.items():
-        if key.lower() in prompt.lower():
+        if key in prompt.lower():
             prompt += " " + enhancement
             break
     general_enhancements = "Ensure high resolution, sharp focus on key elements, and a balanced composition."
     prompt += " " + general_enhancements
     return prompt
 
+# Function to convert speech to text
+def speech_to_text():
+    st.info("Listening... Speak something.")
+    recognizer = sr.Recognizer()
+    mic = sr.Microphone()
+    with mic as source:
+        recognizer.adjust_for_ambient_noise(source)  # Adjust for noise
+        audio = recognizer.listen(source, timeout=5)  # Record audio for 5 seconds
+    try:
+        text = recognizer.recognize_google(audio)
+        return text
+    except sr.UnknownValueError:
+        st.error("Sorry, could not understand audio.")
+        return ""
+    except sr.RequestError as e:
+        st.error(f"Could not request results from Google Speech Recognition service; {e}")
+        return ""
+
 # Modified function to generate images and overlay text
 def generate_images_with_text(input_text, num_images, resolution, text, font_name, font_size, x_position, y_position, text_color, stroke, shadow):
     image_outputs = []
     for _ in range(num_images):
         random_number = random.randint(1, 10000)
-        enhanced_prompt = enhance_prompt_with_csv(input_text, "D:/Sudheesh/content/enhancements.csv")  # Update the path as necessary
+        enhanced_prompt = enhance_prompt_with_csv(input_text, "C:/Users/ASUS/OneDrive/Desktop/enhancements.csv")  # Update the path as necessary
         prompt = f"{enhanced_prompt} {random_number}"
         
         # Insert your Hugging Face API key here
@@ -84,7 +103,7 @@ def generate_images_with_text(input_text, num_images, resolution, text, font_nam
 background_image = """
 <style>
 [data-testid="stAppViewContainer"] > .main {
-    background-image: url("https://c.tenor.com/BN_TOsFHUtYAAAAC/tenor.gif");
+    background-image: url("https://cdn.dribbble.com/users/214929/screenshots/4967879/media/2882629854d56075fd86d61ddee25975.gif");
     background-size: cover;  # This sets the size to cover 100% of the viewport width and height
     background-position: center;  
     background-repeat: no-repeat;
@@ -101,12 +120,35 @@ background-color: rgba(0, 0, 0, 0);
 """
 
 st.markdown(background_image, unsafe_allow_html=True)
-st.title("AI-Powered Image and Text Overlay Generator")
+st.title("ByteBenders: AI-Powered Poster Generator")
+
+# Add voice command button for AI Prompt
+if st.button("Voice Input (AI Prompt)"):
+    spoken_text = speech_to_text()
+    if spoken_text:
+        st.text_area("Spoken Prompt", spoken_text)  # Display recognized text in prompt box
+
 input_text = st.text_area("AI Prompt", "Describe the scene you want to generate.")
+
 num_images = st.number_input("Number of Images", min_value=1, max_value=10, value=1)
 resolution = st.selectbox("Resolution", ["512x512", "1024x1024"])
-text_overlay = st.text_input("Text to Overlay", "Hello, World!")
-font_name = st.text_input("Font Name", "arial.ttf")
+text_overlay = st.text_area("Text to Overlay", "Hello, World!")
+
+# Add voice command button for Text to Overlay
+if st.button("Voice Input (Text to Overlay)"):
+    spoken_text = speech_to_text()
+    if spoken_text:
+        st.text_area("Text to Overlay", spoken_text)  # Display recognized text in text overlay box
+
+font_option = st.radio("Font Option", ("Default", "Import Font"))
+if font_option == "Import Font":
+    uploaded_font = st.file_uploader("Upload Font File (TTF)", type=["ttf"])
+    if uploaded_font is not None:
+        font_path = uploaded_font.name
+        with open(font_path, "wb") as f:
+            f.write(uploaded_font.getvalue())
+else:
+    font_path = "arial.ttf"  # Default font
 font_size = st.slider("Font Size", 10, 100, 20)
 x_position = st.slider("X Position", 0, 1000, 100)
 y_position = st.slider("Y Position", 0, 1000, 50)
@@ -115,7 +157,7 @@ stroke = st.checkbox("Add Stroke")
 shadow = st.checkbox("Add Shadow")
 
 if st.button("Generate"):
-    images = generate_images_with_text(input_text, num_images, resolution, text_overlay, font_name, font_size, x_position, y_position, text_color, stroke, shadow)
+    images = generate_images_with_text(input_text, num_images, resolution, text_overlay, font_path, font_size, x_position, y_position, text_color, stroke, shadow)
     if images:
         for image in images:
             st.image(image, use_column_width=True)
