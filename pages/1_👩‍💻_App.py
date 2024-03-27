@@ -46,7 +46,7 @@ def speech_to_text():
         return ""
 
 # Modified function to generate images and overlay text
-def generate_images_with_text(input_text, num_images, resolution, text, font_name, font_size, x_position, y_position, text_color, stroke, shadow):
+def generate_images_with_text(input_text, num_images, resolution, text, font_name, font_size, font_placement, text_color, stroke, shadow):
     image_outputs = []
     for _ in range(num_images):
         random_number = random.randint(1, 10000)
@@ -73,8 +73,20 @@ def generate_images_with_text(input_text, num_images, resolution, text, font_nam
         image = Image.open(BytesIO(image_data))
         if resolution == '512x512':
             image = image.resize((512, 512))
+            if font_placement == 'Top':
+                text_position = (10, 10)
+            elif font_placement == 'Center':
+                text_position = ((512 - font_size) / 2, (512 - font_size) / 2)
+            elif font_placement == 'Bottom':
+                text_position = (10, 512 - font_size)
         elif resolution == '1024x1024':
             image = image.resize((1024, 1024))
+            if font_placement == 'Top':
+                text_position = (10, 10)
+            elif font_placement == 'Center':
+                text_position = ((1024 - font_size) / 2, (1024 - font_size) / 2)
+            elif font_placement == 'Bottom':
+                text_position = (10, 1024 - font_size)
         
         draw = ImageDraw.Draw(image)
         try:
@@ -83,7 +95,6 @@ def generate_images_with_text(input_text, num_images, resolution, text, font_nam
             st.error(f"Font file {font_name} not found.")
             return
         
-        text_position = (x_position, y_position)
         text_color = text_color
         if stroke:
             outline_color = "black"
@@ -126,19 +137,18 @@ st.title("ByteBenders: AI-Powered Poster Generator")
 if st.button("Voice Input (AI Prompt)"):
     spoken_text = speech_to_text()
     if spoken_text:
-        st.text_area("Spoken Prompt", spoken_text)  # Display recognized text in prompt box
+        st.text_area("AI Prompt", spoken_text)  # Display recognized text in prompt box
+        input_text = spoken_text
 
+# Text area for manual input of AI Prompt
 input_text = st.text_area("AI Prompt", "Describe the scene you want to generate.")
 
 num_images = st.number_input("Number of Images", min_value=1, max_value=10, value=1)
 resolution = st.selectbox("Resolution", ["512x512", "1024x1024"])
 text_overlay = st.text_area("Text to Overlay", "Hello, World!")
 
-# Add voice command button for Text to Overlay
-if st.button("Voice Input (Text to Overlay)"):
-    spoken_text = speech_to_text()
-    if spoken_text:
-        st.text_area("Text to Overlay", spoken_text)  # Display recognized text in text overlay box
+# Font placement buttons
+font_placement = st.radio("Font Placement", ("Top", "Center", "Bottom"))
 
 font_option = st.radio("Font Option", ("Default", "Import Font"))
 if font_option == "Import Font":
@@ -150,14 +160,14 @@ if font_option == "Import Font":
 else:
     font_path = "arial.ttf"  # Default font
 font_size = st.slider("Font Size", 10, 100, 20)
-x_position = st.slider("X Position", 0, 1000, 100)
-y_position = st.slider("Y Position", 0, 1000, 50)
 text_color = st.color_picker("Text Color", "#FFFFFF")
 stroke = st.checkbox("Add Stroke")
 shadow = st.checkbox("Add Shadow")
 
+# Generate button to trigger image generation
 if st.button("Generate"):
-    images = generate_images_with_text(input_text, num_images, resolution, text_overlay, font_path, font_size, x_position, y_position, text_color, stroke, shadow)
+    images = generate_images_with_text(input_text, num_images, resolution, text_overlay, font_path, font_size, font_placement, text_color, stroke, shadow)
     if images:
+        # Display generated images
         for image in images:
             st.image(image, use_column_width=True)
