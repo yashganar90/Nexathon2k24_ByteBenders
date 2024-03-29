@@ -1,4 +1,4 @@
-# Hackathon Project: Poster Generator using Hugging Face API
+# KALAKRITI AI: Poster Generator using Hugging Face API
 
 Welcome to our Hackathon project repository! Our project is a Poster Generator that utilizes the Hugging Face API to generate images, and then allows users to add customizable text onto these images.
 
