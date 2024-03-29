@@ -50,11 +50,11 @@ def generate_images_with_text(input_text, num_images, resolution, text, font_nam
     image_outputs = []
     for _ in range(num_images):
         random_number = random.randint(1, 10000)
-        enhanced_prompt = enhance_prompt_with_csv(input_text, "C:/Users/ASUS/OneDrive/Desktop/enhancements.csv")  # Update the path as necessary
+        enhanced_prompt = enhance_prompt_with_csv(input_text,"Path of enhancements.csv file")  # Update the path as necessary
         prompt = f"{enhanced_prompt} {random_number}"
         
         # Insert your Hugging Face API key here
-        api_key = "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"
+        api_key = "Your hugging face API key"
         response = requests.post(
             "https://api-inference.huggingface.co/models/prompthero/openjourney",  # Update your model path
             headers={
